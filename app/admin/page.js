@@ -220,21 +220,21 @@ export default function AdminPanel() {
             <div className="max-w-7xl mx-auto">
 
                 {/* Header */}
-                <div className="flex justify-between items-center mb-8">
+                <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
                     <div>
-                        <h1 className="text-4xl font-bold mb-2">Admin Dashboard</h1>
-                        <p style={{ color: 'var(--text-secondary)' }}>Manage shared links</p>
+                        <h1 className="text-2xl md:text-4xl font-bold mb-1">Admin Dashboard</h1>
+                        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Manage shared links</p>
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex gap-2">
                         <button
                             onClick={fetchLinks}
-                            className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition"
+                            className="px-3 py-2 text-sm rounded-lg bg-white/10 hover:bg-white/20 transition"
                         >
                             🔄 Refresh
                         </button>
                         <button
                             onClick={handleLogout}
-                            className="px-4 py-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 transition"
+                            className="px-3 py-2 text-sm rounded-lg bg-red-500/20 hover:bg-red-500/30 transition"
                         >
                             🚪 Logout
                         </button>
@@ -242,83 +242,83 @@ export default function AdminPanel() {
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-                    <div className="glass-card p-5">
-                        <div className="text-3xl font-bold">{links.length}</div>
-                        <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>Total Links</div>
+                <div className="grid grid-cols-3 md:grid-cols-5 gap-2 md:gap-4 mb-6">
+                    <div className="glass-card p-3 md:p-5">
+                        <div className="text-xl md:text-3xl font-bold">{links.length}</div>
+                        <div className="text-xs md:text-sm" style={{ color: 'var(--text-secondary)' }}>Total</div>
                     </div>
-                    <div className="glass-card p-5">
-                        <div className="text-3xl font-bold text-yellow-300">
+                    <div className="glass-card p-3 md:p-5">
+                        <div className="text-xl md:text-3xl font-bold text-yellow-300">
                             {links.filter(l => (l.reportCount || 0) > 0).length}
                         </div>
-                        <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>Reported Links</div>
+                        <div className="text-xs md:text-sm" style={{ color: 'var(--text-secondary)' }}>Reported</div>
                     </div>
-                    <div className="glass-card p-5">
-                        <div className="text-3xl font-bold text-red-300">
+                    <div className="glass-card p-3 md:p-5">
+                        <div className="text-xl md:text-3xl font-bold text-red-300">
                             {links.filter(l => l.status === 'flagged').length}
                         </div>
-                        <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>Flagged Links</div>
+                        <div className="text-xs md:text-sm" style={{ color: 'var(--text-secondary)' }}>Flagged</div>
                     </div>
-                    <div className="glass-card p-5">
-                        <div className="text-3xl font-bold text-orange-300">
+                    <div className="glass-card p-3 md:p-5">
+                        <div className="text-xl md:text-3xl font-bold text-orange-300">
                             {links.filter(l => l.securityStatus === 'suspicious' || l.securityStatus === 'malicious').length}
                         </div>
-                        <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>🛡️ Security Review</div>
+                        <div className="text-xs md:text-sm" style={{ color: 'var(--text-secondary)' }}>🛡️ Security</div>
                     </div>
-                    <div className="glass-card p-5">
-                        <div className="text-3xl font-bold text-blue-300">
+                    <div className="glass-card p-3 md:p-5">
+                        <div className="text-xl md:text-3xl font-bold text-blue-300">
                             {links.filter(l => l.isVerified === true).length}
                         </div>
-                        <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>✓ Verified Posts</div>
+                        <div className="text-xs md:text-sm" style={{ color: 'var(--text-secondary)' }}>✓ Verified</div>
                     </div>
                 </div>
 
                 {/* Filters and Search */}
-                <div className="glass-card p-5 mb-6">
-                    <div className="flex flex-col md:flex-row gap-4">
+                <div className="glass-card p-4 md:p-5 mb-6">
+                    <div className="flex flex-col gap-3">
                         {/* Filter Buttons */}
-                        <div className="flex gap-2">
+                        <div className="flex flex-wrap gap-2">
                             <button
                                 onClick={() => setFilter("all")}
-                                className={`px-4 py-2 rounded-lg transition ${filter === "all" ? "bg-purple-500" : "bg-white/10 hover:bg-white/20"
+                                className={`px-3 py-1.5 text-sm rounded-lg transition ${filter === "all" ? "bg-purple-500" : "bg-white/10 hover:bg-white/20"
                                     }`}
                             >
                                 All
                             </button>
                             <button
                                 onClick={() => setFilter("reported")}
-                                className={`px-4 py-2 rounded-lg transition ${filter === "reported" ? "bg-yellow-500" : "bg-white/10 hover:bg-white/20"
+                                className={`px-3 py-1.5 text-sm rounded-lg transition ${filter === "reported" ? "bg-yellow-500" : "bg-white/10 hover:bg-white/20"
                                     }`}
                             >
                                 Reported
                             </button>
                             <button
                                 onClick={() => setFilter("flagged")}
-                                className={`px-4 py-2 rounded-lg transition ${filter === "flagged" ? "bg-red-500" : "bg-white/10 hover:bg-white/20"
+                                className={`px-3 py-1.5 text-sm rounded-lg transition ${filter === "flagged" ? "bg-red-500" : "bg-white/10 hover:bg-white/20"
                                     }`}
                             >
                                 Flagged
                             </button>
                             <button
                                 onClick={() => setFilter("security")}
-                                className={`px-4 py-2 rounded-lg transition ${filter === "security" ? "bg-orange-500" : "bg-white/10 hover:bg-white/20"
+                                className={`px-3 py-1.5 text-sm rounded-lg transition ${filter === "security" ? "bg-orange-500" : "bg-white/10 hover:bg-white/20"
                                     }`}
                             >
-                                🛡️ Security
+                                🛡️
                             </button>
                             <button
                                 onClick={() => setFilter("verified")}
-                                className={`px-4 py-2 rounded-lg transition ${filter === "verified" ? "bg-blue-500" : "bg-white/10 hover:bg-white/20"
+                                className={`px-3 py-1.5 text-sm rounded-lg transition ${filter === "verified" ? "bg-blue-500" : "bg-white/10 hover:bg-white/20"
                                     }`}
                             >
-                                ✓ Verified
+                                ✓
                             </button>
                             <button
                                 onClick={() => setFilter("notverified")}
-                                className={`px-4 py-2 rounded-lg transition ${filter === "notverified" ? "bg-gray-500" : "bg-white/10 hover:bg-white/20"
+                                className={`px-3 py-1.5 text-sm rounded-lg transition ${filter === "notverified" ? "bg-gray-500" : "bg-white/10 hover:bg-white/20"
                                     }`}
                             >
-                                Not Verified
+                                ✗
                             </button>
                         </div>
 
@@ -326,7 +326,7 @@ export default function AdminPanel() {
                         <input
                             type="text"
                             placeholder="Search links..."
-                            className="input-glass flex-1"
+                            className="input-glass w-full"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -460,8 +460,8 @@ export default function AdminPanel() {
                                             type="button"
                                             onClick={() => setEditVerified(true)}
                                             className={`flex-1 px-4 py-2 rounded-lg transition font-medium ${editVerified
-                                                    ? 'bg-blue-500 text-white'
-                                                    : 'bg-white/10 hover:bg-white/20'
+                                                ? 'bg-blue-500 text-white'
+                                                : 'bg-white/10 hover:bg-white/20'
                                                 }`}
                                         >
                                             ✓ Verified
@@ -470,8 +470,8 @@ export default function AdminPanel() {
                                             type="button"
                                             onClick={() => setEditVerified(false)}
                                             className={`flex-1 px-4 py-2 rounded-lg transition font-medium ${!editVerified
-                                                    ? 'bg-gray-500 text-white'
-                                                    : 'bg-white/10 hover:bg-white/20'
+                                                ? 'bg-gray-500 text-white'
+                                                : 'bg-white/10 hover:bg-white/20'
                                                 }`}
                                         >
                                             Not Verified
@@ -499,8 +499,8 @@ export default function AdminPanel() {
                     </div>
                 )}
 
-                {/* Links Table */}
-                <div className="glass-card p-5 overflow-x-auto">
+                {/* Links - Mobile Cards / Desktop Table */}
+                <div className="glass-card p-3 md:p-5">
                     {loading ? (
                         <div className="text-center py-8">Loading...</div>
                     ) : filteredLinks.length === 0 ? (
@@ -508,122 +508,223 @@ export default function AdminPanel() {
                             No links found
                         </div>
                     ) : (
-                        <table className="w-full">
-                            <thead>
-                                <tr className="border-b border-white/10">
-                                    <th className="text-left p-3">From</th>
-                                    <th className="text-left p-3">Message</th>
-                                    <th className="text-left p-3">Tags</th>
-                                    <th className="text-left p-3">URL</th>
-                                    <th className="text-left p-3">Reports</th>
-                                    <th className="text-left p-3">Security</th>
-                                    <th className="text-left p-3">Status</th>
-                                    <th className="text-left p-3">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+                        <>
+                            {/* Mobile Card View */}
+                            <div className="md:hidden space-y-3">
                                 {filteredLinks.map((link) => (
-                                    <tr key={link.id} className="border-b border-white/5 hover:bg-white/5">
-                                        <td className="p-3 text-sm">
+                                    <div key={link.id} className="bg-white/5 rounded-lg p-4">
+                                        {/* Header: From + Badges */}
+                                        <div className="flex items-center justify-between mb-2">
                                             <div className="flex items-center gap-2">
-                                                {link.from || "Anonymous"}
+                                                <span className="font-medium">{link.from || "Anonymous"}</span>
                                                 {link.isVerified && (
                                                     <span className="verified-icon" title="Verified">✓</span>
                                                 )}
                                             </div>
-                                        </td>
-                                        <td className="p-3 text-sm max-w-xs truncate">{link.message}</td>
-                                        <td className="p-3 text-sm">
-                                            <div className="flex flex-wrap gap-1 max-w-[150px]">
-                                                {link.tags && link.tags.length > 0 ? (
-                                                    link.tags.slice(0, 2).map(tagId => {
-                                                        const tag = AVAILABLE_TAGS.find(t => t.id === tagId);
-                                                        return tag ? (
-                                                            <span key={tagId} className="text-xs px-1.5 py-0.5 rounded bg-purple-500/30">
-                                                                {tag.emoji}
-                                                            </span>
-                                                        ) : null;
-                                                    })
-                                                ) : (
-                                                    <span className="text-xs" style={{ color: 'var(--text-muted)' }}>—</span>
-                                                )}
-                                                {link.tags && link.tags.length > 2 && (
-                                                    <span className="text-xs" style={{ color: 'var(--text-muted)' }}>+{link.tags.length - 2}</span>
-                                                )}
+                                            <div className="flex gap-1">
+                                                <span className={`px-2 py-0.5 rounded text-xs ${link.securityStatus === 'malicious' ? 'bg-red-500/20 text-red-300' :
+                                                        link.securityStatus === 'suspicious' ? 'bg-orange-500/20 text-orange-300' :
+                                                            link.securityStatus === 'safe' ? 'bg-green-500/20 text-green-300' :
+                                                                'bg-gray-500/20 text-gray-300'
+                                                    }`}>
+                                                    {link.securityStatus === 'malicious' ? '🚨' :
+                                                        link.securityStatus === 'suspicious' ? '⚠️' :
+                                                            link.securityStatus === 'safe' ? '✅' :
+                                                                link.securityStatus === 'pending' ? '🔄' : '❓'}
+                                                </span>
+                                                <span className={`px-2 py-0.5 rounded text-xs ${link.status === 'flagged' ? 'bg-red-500/20 text-red-300' :
+                                                        link.status === 'rejected' ? 'bg-gray-500/20 text-gray-300' :
+                                                            'bg-green-500/20 text-green-300'
+                                                    }`}>
+                                                    {link.status === 'flagged' ? '🚩' : link.status === 'rejected' ? '❌' : '✅'}
+                                                </span>
                                             </div>
-                                        </td>
-                                        <td className="p-3 text-sm">
-                                            <a
-                                                href={link.url}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="text-blue-300 hover:underline truncate block max-w-xs"
+                                        </div>
+
+                                        {/* Message */}
+                                        <p className="text-sm mb-2 line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
+                                            {link.message}
+                                        </p>
+
+                                        {/* URL */}
+                                        <a
+                                            href={link.url}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="text-xs text-blue-300 hover:underline block truncate mb-3"
+                                        >
+                                            {(() => { try { return new URL(link.url).hostname; } catch { return link.url; } })()}
+                                        </a>
+
+                                        {/* Tags + Reports */}
+                                        <div className="flex items-center justify-between mb-3">
+                                            <div className="flex gap-1">
+                                                {link.tags?.slice(0, 3).map(tagId => {
+                                                    const tag = AVAILABLE_TAGS.find(t => t.id === tagId);
+                                                    return tag ? (
+                                                        <span key={tagId} className="text-xs px-1.5 py-0.5 rounded bg-purple-500/30">
+                                                            {tag.emoji}
+                                                        </span>
+                                                    ) : null;
+                                                })}
+                                            </div>
+                                            {(link.reportCount || 0) > 0 && (
+                                                <span className="text-xs text-yellow-300">⚠️ {link.reportCount} reports</span>
+                                            )}
+                                        </div>
+
+                                        {/* Actions */}
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => {
+                                                    setEditingLink(link);
+                                                    setEditTags(link.tags || []);
+                                                    setEditStatus(link.status || 'approved');
+                                                    setEditVerified(link.isVerified || false);
+                                                }}
+                                                className="flex-1 text-xs py-2 rounded bg-blue-500/20 hover:bg-blue-500/30 transition"
                                             >
-                                                {new URL(link.url).hostname}
-                                            </a>
-                                        </td>
-                                        <td className="p-3 text-sm">
-                                            <span className={`${(link.reportCount || 0) > 0 ? 'text-yellow-300 font-bold' : ''}`}>
-                                                {link.reportCount || 0}
-                                            </span>
-                                        </td>
-                                        <td className="p-3 text-sm">
-                                            <span className={`px-2 py-1 rounded text-xs ${link.securityStatus === 'malicious' ? 'bg-red-500/20 text-red-300' :
-                                                link.securityStatus === 'suspicious' ? 'bg-orange-500/20 text-orange-300' :
-                                                    link.securityStatus === 'safe' ? 'bg-green-500/20 text-green-300' :
-                                                        'bg-gray-500/20 text-gray-300'
-                                                }`}>
-                                                {link.securityStatus === 'malicious' ? '🚨 Malicious' :
-                                                    link.securityStatus === 'suspicious' ? '⚠️ Suspicious' :
-                                                        link.securityStatus === 'safe' ? '✅ Safe' :
-                                                            link.securityStatus === 'pending' ? '🔄 Scanning' :
-                                                                '❓ Unknown'}
-                                            </span>
-                                        </td>
-                                        <td className="p-3 text-sm">
-                                            <span className={`px-2 py-1 rounded text-xs ${link.status === 'flagged' ? 'bg-red-500/20 text-red-300' :
-                                                link.status === 'rejected' ? 'bg-gray-500/20 text-gray-300' :
-                                                    'bg-green-500/20 text-green-300'
-                                                }`}>
-                                                {link.status || 'approved'}
-                                            </span>
-                                        </td>
-                                        <td className="p-3">
-                                            <div className="flex gap-2">
-                                                <button
-                                                    onClick={() => {
-                                                        setEditingLink(link);
-                                                        setEditTags(link.tags || []);
-                                                        setEditStatus(link.status || 'approved');
-                                                        setEditVerified(link.isVerified || false);
-                                                    }}
-                                                    className="text-xs px-3 py-1 rounded bg-blue-500/20 hover:bg-blue-500/30 transition"
-                                                    title="Edit"
-                                                >
-                                                    ✏️
-                                                </button>
-                                                <button
-                                                    onClick={() => handleUpdate(link.id, {
-                                                        status: link.status === 'flagged' ? 'approved' : 'flagged'
-                                                    })}
-                                                    className="text-xs px-3 py-1 rounded bg-yellow-500/20 hover:bg-yellow-500/30 transition"
-                                                    title={link.status === 'flagged' ? 'Approve' : 'Flag'}
-                                                >
-                                                    {link.status === 'flagged' ? '✅' : '🚩'}
-                                                </button>
-                                                <button
-                                                    onClick={() => setDeleteConfirm(link.id)}
-                                                    className="text-xs px-3 py-1 rounded bg-red-500/20 hover:bg-red-500/30 transition"
-                                                    title="Delete"
-                                                >
-                                                    🗑️
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                                ✏️ Edit
+                                            </button>
+                                            <button
+                                                onClick={() => handleUpdate(link.id, {
+                                                    status: link.status === 'flagged' ? 'approved' : 'flagged'
+                                                })}
+                                                className="flex-1 text-xs py-2 rounded bg-yellow-500/20 hover:bg-yellow-500/30 transition"
+                                            >
+                                                {link.status === 'flagged' ? '✅ Approve' : '🚩 Flag'}
+                                            </button>
+                                            <button
+                                                onClick={() => setDeleteConfirm(link.id)}
+                                                className="text-xs px-4 py-2 rounded bg-red-500/20 hover:bg-red-500/30 transition"
+                                            >
+                                                🗑️
+                                            </button>
+                                        </div>
+                                    </div>
                                 ))}
-                            </tbody>
-                        </table>
+                            </div>
+
+                            {/* Desktop Table View */}
+                            <div className="hidden md:block overflow-x-auto">
+                                <table className="w-full">
+                                    <thead>
+                                        <tr className="border-b border-white/10">
+                                            <th className="text-left p-3">From</th>
+                                            <th className="text-left p-3">Message</th>
+                                            <th className="text-left p-3">Tags</th>
+                                            <th className="text-left p-3">URL</th>
+                                            <th className="text-left p-3">Reports</th>
+                                            <th className="text-left p-3">Security</th>
+                                            <th className="text-left p-3">Status</th>
+                                            <th className="text-left p-3">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {filteredLinks.map((link) => (
+                                            <tr key={link.id} className="border-b border-white/5 hover:bg-white/5">
+                                                <td className="p-3 text-sm">
+                                                    <div className="flex items-center gap-2">
+                                                        {link.from || "Anonymous"}
+                                                        {link.isVerified && (
+                                                            <span className="verified-icon" title="Verified">✓</span>
+                                                        )}
+                                                    </div>
+                                                </td>
+                                                <td className="p-3 text-sm max-w-xs truncate">{link.message}</td>
+                                                <td className="p-3 text-sm">
+                                                    <div className="flex flex-wrap gap-1 max-w-[150px]">
+                                                        {link.tags && link.tags.length > 0 ? (
+                                                            link.tags.slice(0, 2).map(tagId => {
+                                                                const tag = AVAILABLE_TAGS.find(t => t.id === tagId);
+                                                                return tag ? (
+                                                                    <span key={tagId} className="text-xs px-1.5 py-0.5 rounded bg-purple-500/30">
+                                                                        {tag.emoji}
+                                                                    </span>
+                                                                ) : null;
+                                                            })
+                                                        ) : (
+                                                            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>—</span>
+                                                        )}
+                                                        {link.tags && link.tags.length > 2 && (
+                                                            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>+{link.tags.length - 2}</span>
+                                                        )}
+                                                    </div>
+                                                </td>
+                                                <td className="p-3 text-sm">
+                                                    <a
+                                                        href={link.url}
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                        className="text-blue-300 hover:underline truncate block max-w-xs"
+                                                    >
+                                                        {(() => { try { return new URL(link.url).hostname; } catch { return link.url; } })()}
+                                                    </a>
+                                                </td>
+                                                <td className="p-3 text-sm">
+                                                    <span className={`${(link.reportCount || 0) > 0 ? 'text-yellow-300 font-bold' : ''}`}>
+                                                        {link.reportCount || 0}
+                                                    </span>
+                                                </td>
+                                                <td className="p-3 text-sm">
+                                                    <span className={`px-2 py-1 rounded text-xs ${link.securityStatus === 'malicious' ? 'bg-red-500/20 text-red-300' :
+                                                        link.securityStatus === 'suspicious' ? 'bg-orange-500/20 text-orange-300' :
+                                                            link.securityStatus === 'safe' ? 'bg-green-500/20 text-green-300' :
+                                                                'bg-gray-500/20 text-gray-300'
+                                                        }`}>
+                                                        {link.securityStatus === 'malicious' ? '🚨 Malicious' :
+                                                            link.securityStatus === 'suspicious' ? '⚠️ Suspicious' :
+                                                                link.securityStatus === 'safe' ? '✅ Safe' :
+                                                                    link.securityStatus === 'pending' ? '🔄 Scanning' :
+                                                                        '❓ Unknown'}
+                                                    </span>
+                                                </td>
+                                                <td className="p-3 text-sm">
+                                                    <span className={`px-2 py-1 rounded text-xs ${link.status === 'flagged' ? 'bg-red-500/20 text-red-300' :
+                                                        link.status === 'rejected' ? 'bg-gray-500/20 text-gray-300' :
+                                                            'bg-green-500/20 text-green-300'
+                                                        }`}>
+                                                        {link.status || 'approved'}
+                                                    </span>
+                                                </td>
+                                                <td className="p-3">
+                                                    <div className="flex gap-2">
+                                                        <button
+                                                            onClick={() => {
+                                                                setEditingLink(link);
+                                                                setEditTags(link.tags || []);
+                                                                setEditStatus(link.status || 'approved');
+                                                                setEditVerified(link.isVerified || false);
+                                                            }}
+                                                            className="text-xs px-3 py-1 rounded bg-blue-500/20 hover:bg-blue-500/30 transition"
+                                                            title="Edit"
+                                                        >
+                                                            ✏️
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleUpdate(link.id, {
+                                                                status: link.status === 'flagged' ? 'approved' : 'flagged'
+                                                            })}
+                                                            className="text-xs px-3 py-1 rounded bg-yellow-500/20 hover:bg-yellow-500/30 transition"
+                                                            title={link.status === 'flagged' ? 'Approve' : 'Flag'}
+                                                        >
+                                                            {link.status === 'flagged' ? '✅' : '🚩'}
+                                                        </button>
+                                                        <button
+                                                            onClick={() => setDeleteConfirm(link.id)}
+                                                            className="text-xs px-3 py-1 rounded bg-red-500/20 hover:bg-red-500/30 transition"
+                                                            title="Delete"
+                                                        >
+                                                            🗑️
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </>
                     )}
                 </div>
 
