@@ -1,6 +1,6 @@
 # 🔗 SendTheLink
 
-> **SendTheLink** is a free, secure, and modern link sharing platform with AI-powered content moderation, spam protection, and tag-based categorization. Share useful resources with anyone — no login required.
+> **SendTheLink** is a free, secure, and modern link sharing platform with multi-layer security scanning, spam protection, and tag-based categorization. Share useful resources with anyone — no login required.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/fanzyb/sendthelink)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -9,42 +9,59 @@
 
 **Live Demo:** [sendthelink.vercel.app](https://sendthelink.vercel.app)
 
-**Keywords:** link sharing, resource sharing, free links, design assets, code resources, AI moderation, anonymous sharing
+**Keywords:** link sharing, resource sharing, free links, design assets, code resources, security scanning, anonymous sharing
 
 ---
 
 ## ✨ Features
 
 ### 🔒 **Security First**
-- ✅ **Rate Limiting** - Prevents spam (5 submissions per 10 min)
-- ✅ **XSS Protection** - All inputs sanitized
 - ✅ **Google reCAPTCHA v3** - Bot protection
-- ✅ **3-Layer Content Moderation**:
-  - Pattern-based filtering (spam, adult, gambling)
-  - Google Safe Browsing API
-  - Google Gemini AI analysis
+- ✅ **VirusTotal Integration** - Scans links against 70+ antivirus engines
+- ✅ **URLScan.io Integration** - Real-time URL security analysis
+- ✅ **Content Moderation** - Pattern-based filtering (spam, adult, gambling)
+- ✅ **XSS Protection** - All inputs sanitized
 - ✅ **Security Headers** - CSP, X-Frame-Options, HSTS, etc.
 
+### ✓ **Verified User System**
+- ✅ **Verified Badge** - Blue checkmark for trusted users (like Twitter/Meta)
+- ✅ **Password Authentication** - Only verified users with correct password get the badge
+- ✅ **Admin Control** - Manually verify/unverify users from admin dashboard
+
 ### 🎨 **Modern UI/UX**
-- Glassmorphic dark purple design with smooth animations
+- Shadcn/UI inspired dark theme with purple accent
 - Responsive layout (mobile, tablet, desktop)
 - Dark mode optimized
 - Real-time link preview with OG metadata
 - Anonymous posting option
-- **Tag-based categorization** (3D Assets, Design, Code, Tutorial, Tools, AI, Music, Video, Fonts, Game, Android, Windows)
+- Centered toast notifications (mobile-friendly)
+- **Tag-based categorization** (3D Assets, Design, Code, Tutorial, Tools, AI, Music, Video, Fonts, Game, Android, Windows, Other)
 
 ### 📊 **Admin Dashboard**
-- Password-protected admin panel
-- Moderate reported links
-- Edit/delete links and tags
-- Search and filter by tags
-- Auto-flag system (3+ reports)
+- Password-protected admin panel (`/admin`)
+- View all links with security status
+- Edit links: message, URL, tags, status, verified badge
+- Delete links with confirmation
+- Filter by: All, Reported, Flagged, Security Issues, Verified, Not Verified
+- Search functionality
+- Stats overview (Total, Reported, Flagged, Security Review, Verified)
 
-### 🚀 **Performance**
-- Server-side rendering with Next.js 16
-- Edge-optimized API routes
-- Real-time updates with Firestore
-- Optimized images and assets
+### �️ **Security Scanning**
+- **Async scanning** - Links are scanned in background after submission
+- **Security Status**: Safe ✅ | Suspicious ⚠️ | Malicious 🚨 | Pending 🔄
+- **Powered by**: VirusTotal & URLScan.io
+
+### 🔗 **Link Details Page**
+- Dedicated page for each shared link (`/link/[id]`)
+- Large preview image
+- Verified badge display
+- Share, Copy, Report buttons
+- Full message and metadata
+
+### 📢 **Report System**
+- Users can report inappropriate content
+- Auto-flag after multiple reports
+- DMCA takedown request via email
 
 ---
 
@@ -54,7 +71,9 @@
 
 - Node.js 18+ 
 - Firebase account
-- Google Cloud account (for APIs)
+- Google Cloud account (for reCAPTCHA)
+- VirusTotal API key (free tier available)
+- URLScan.io API key (free tier available)
 - Vercel account (for deployment)
 
 ### 1. Clone Repository
@@ -72,30 +91,35 @@ npm install
 3. Enable Firestore Database
 4. Get your Firebase config (Settings → Your apps)
 
-### 3. Set Up Google APIs
+### 3. Set Up APIs
 
-Get API keys from [Google Cloud Console](https://console.cloud.google.com/):
-- **Gemini API** (for AI moderation)
-- **Safe Browsing API** (for malware detection)
-- **reCAPTCHA v3** (for bot protection)
+Get API keys from:
+- **reCAPTCHA v3** - [Google reCAPTCHA](https://www.google.com/recaptcha/)
+- **VirusTotal** - [VirusTotal API](https://www.virustotal.com/gui/my-apikey)
+- **URLScan.io** - [URLScan API](https://urlscan.io/user/profile/)
 
 ### 4. Configure Environment Variables
 
 Create `.env.local`:
 
 ```bash
-# Backend API Keys
-GEMINI_API_KEY=your_gemini_api_key
+# Security APIs
+VIRUSTOTAL_API_KEY=your_virustotal_api_key
+URLSCAN_API_KEY=your_urlscan_api_key
+
+# reCAPTCHA
+NEXT_PUBLIC_RECAPTCHA_SITE_KEY=your_recaptcha_site_key
 RECAPTCHA_SECRET_KEY=your_recaptcha_secret_key
-SAFE_BROWSING_API_KEY=your_safe_browsing_api_key
+RECAPTCHA_MIN_SCORE=0.5
+
+# Admin
 ADMIN_PASSWORD=your_secure_admin_password
 
-# Configuration
-RECAPTCHA_MIN_SCORE=0.5
-FILTER_WHITELIST_MODE=false
+# Verified User System
+VERIFIED_USER_PASSWORD=your_secret_verification_password
 
-# Frontend (NEXT_PUBLIC_*)
-NEXT_PUBLIC_RECAPTCHA_SITE_KEY=your_recaptcha_site_key
+# Configuration
+FILTER_WHITELIST_MODE=false
 
 # Firebase Configuration
 NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
@@ -105,8 +129,6 @@ NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project.firebasestorage.app
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
 ```
-
-See `.env.example` for a complete template.
 
 ### 5. Run Development Server
 
@@ -130,7 +152,7 @@ Open [http://localhost:3000](http://localhost:3000)
 2. **Import to Vercel**
    - Go to [vercel.com/new](https://vercel.com/new)
    - Import your repository
-   - Add all environment variables (see `.env.example`)
+   - Add all environment variables
    - Deploy!
 
 3. **Post-Deployment**
@@ -143,13 +165,13 @@ Open [http://localhost:3000](http://localhost:3000)
 
 This project implements multiple layers of security:
 
+- **VirusTotal Scanning** - Links checked against 70+ antivirus engines
+- **URLScan.io Analysis** - Real-time URL security scanning
 - **Input Sanitization** - XSS protection on all user inputs
-- **Rate Limiting** - IP-based rate limiting on all endpoints
-- **Content Moderation** - AI + pattern-based filtering
+- **Content Moderation** - Pattern-based filtering
 - **HTTPS Only** - Enforced via HSTS headers
 - **CSP** - Content Security Policy headers
 - **Safe Firebase Rules** - Server-only writes, public reads
-
 
 ### Reporting Security Issues
 
@@ -165,27 +187,35 @@ Do NOT open public issues for security vulnerabilities.
 sendthelink/
 ├── app/                    # Next.js App Router
 │   ├── api/               # API Routes
-│   │   ├── admin/        # Admin endpoints
+│   │   ├── admin/        # Admin endpoints (auth, links)
 │   │   ├── moderate/     # Content moderation
-│   │   ├── preview/      # Link preview
+│   │   ├── preview/      # Link preview metadata
 │   │   ├── report/       # Report system
+│   │   ├── scan/         # Security scanning (VirusTotal, URLScan)
 │   │   ├── submit/       # Secure submission
-│   │   └── verify-captcha/ # reCAPTCHA
+│   │   └── verify-captcha/ # reCAPTCHA verification
 │   ├── admin/            # Admin dashboard
-│   ├── globals.css       # Global styles
+│   ├── link/[id]/        # Link details page
+│   ├── globals.css       # Global styles (Shadcn theme)
 │   ├── layout.js         # Root layout
 │   └── page.js           # Homepage
 ├── lib/                   # Utilities
-│   ├── firebase.js       # Firebase config
-│   ├── rateLimit.js      # Rate limiting
-│   └── sanitize.js       # Input sanitization
-├── public/               # Static assets
-└── docs/                 # Documentation
+│   └── firebase.js       # Firebase config
+└── public/               # Static assets
 ```
 
 ---
 
 ## 🔧 Configuration
+
+### Verified User System
+
+To get the verified badge:
+1. Set `VERIFIED_USER_PASSWORD` in your `.env.local`
+2. When submitting a link, enter the password in "Verification Password" field
+3. Your posts will show the blue ✓ Verified badge
+
+Admin can also manually verify/unverify users from the Edit Link modal.
 
 ### Content Filtering
 
@@ -194,22 +224,9 @@ Edit `app/api/moderate/route.js` to customize:
 - Spam patterns
 - Whitelisted domains (if `FILTER_WHITELIST_MODE=true`)
 
-### Rate Limits
-
-Edit `lib/rateLimit.js`:
-```javascript
-export const submitLimiter = rateLimit({
-  interval: 10 * 60 * 1000, // 10 minutes
-  // Change limit: await submitLimiter.check(request, 5, ip);
-});
-```
-
 ### Admin Auth
 
-Default uses simple password auth. For production:
-- Consider implementing JWT with expiration
-- Add 2FA for admin access
-- Use session management
+Access admin panel at `/admin` with `ADMIN_PASSWORD`.
 
 ---
 
@@ -223,13 +240,6 @@ Contributions are welcome! Please:
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-### Development Guidelines
-
-- Follow existing code style
-- Add tests for new features
-- Update documentation
-- Ensure security best practices
-
 ---
 
 ## 📝 License
@@ -242,7 +252,8 @@ This project is licensed under the **MIT License** - see [LICENSE](LICENSE) file
 
 - [Next.js](https://nextjs.org/) - React framework
 - [Firebase](https://firebase.google.com/) - Backend infrastructure
-- [Google Gemini](https://ai.google.dev/) - AI moderation
+- [VirusTotal](https://www.virustotal.com/) - URL security scanning
+- [URLScan.io](https://urlscan.io/) - URL analysis
 - [Vercel](https://vercel.com/) - Hosting platform
 - [reCAPTCHA](https://www.google.com/recaptcha/) - Bot protection
 
@@ -253,13 +264,15 @@ This project is licensed under the **MIT License** - see [LICENSE](LICENSE) file
 - **Website:** [sendthelink.vercel.app](https://sendthelink.vercel.app)
 - **Issues:** [GitHub Issues](https://github.com/fanzyb/sendthelink/issues)
 - **Email:** fanzirfan@proton.me
+- **DMCA:** dmca@manji.eu.org
 
 ---
 
 ## 🗺️ Roadmap
 
-- [ ] User accounts & profiles
 - [x] ~~Collections/categories~~ → **Tags system implemented!**
+- [x] ~~Security scanning~~ → **VirusTotal & URLScan.io integrated!**
+- [x] ~~Verified users~~ → **Verified badge system implemented!**
 - [ ] Link analytics
 - [ ] Custom short URLs
 - [ ] API for third-party integrations

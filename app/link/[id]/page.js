@@ -267,9 +267,14 @@ export default function LinkDetailsPage() {
                             <div className="text-sm font-bold uppercase tracking-wider mb-1" style={{ color: 'var(--text-muted)' }}>
                                 Shared by
                             </div>
-                            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 bg-clip-text text-transparent">
-                                {linkData.from || "Anonymous"}
-                            </h1>
+                            <div className="flex items-center gap-3">
+                                <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 bg-clip-text text-transparent">
+                                    {linkData.from || "Anonymous"}
+                                </h1>
+                                {linkData.isVerified && (
+                                    <span className="verified-badge">✓ Verified</span>
+                                )}
+                            </div>
                         </div>
                         <div className="flex gap-2 flex-wrap">
                             {/* Share Button */}

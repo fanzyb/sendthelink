@@ -25,7 +25,7 @@ const AVAILABLE_TAGS = [
 export default function Home() {
   const [links, setLinks] = useState([]);
   const [filteredLinks, setFilteredLinks] = useState([]);
-  const [form, setForm] = useState({ from: "", message: "", url: "", isAnonymous: false, tags: [] });
+  const [form, setForm] = useState({ from: "", message: "", url: "", isAnonymous: false, tags: [], verifyPassword: "" });
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTagFilter, setActiveTagFilter] = useState(null);
@@ -181,6 +181,7 @@ export default function Home() {
           tags: form.tags,
           metaTitle: metaData.title || form.url,
           metaImage: metaData.image || null,
+          verifyPassword: form.verifyPassword || null, // For verified badge
         }),
       });
 
@@ -197,7 +198,7 @@ export default function Home() {
       }
 
       // Reset form
-      setForm({ from: "", message: "", url: "", isAnonymous: false, tags: [] });
+      setForm({ from: "", message: "", url: "", isAnonymous: false, tags: [], verifyPassword: "" });
       showToast("✅ Link shared successfully!\n🔍 Link is being scanned for security, please wait...", "success");
 
     } catch (error) {
@@ -423,6 +424,17 @@ export default function Home() {
               </div>
             </div>
 
+            {/* Verified Password (Optional) */}
+            <div>
+              <input
+                type="password"
+                placeholder="🔐 Verification Password (optional - for verified badge)"
+                className="input-glass w-full"
+                value={form.verifyPassword}
+                onChange={(e) => setForm({ ...form, verifyPassword: e.target.value })}
+              />
+            </div>
+
             {/* Anonymous Checkbox */}
             <div className="flex items-center gap-3">
               <input
@@ -497,8 +509,11 @@ export default function Home() {
               style={{ animationDelay: `${0.3 + index * 0.05}s` }}
             >
               <div className="flex items-start justify-between mb-3">
-                <div className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                <div className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--text-muted)' }}>
                   From: <span style={{ color: 'var(--text-secondary)' }}>{item.from || "Anonymous"}</span>
+                  {item.isVerified && (
+                    <span className="verified-badge">✓ Verified</span>
+                  )}
                 </div>
                 <div className="flex gap-2 flex-wrap">
                   {/* Share Details Button */}
@@ -607,9 +622,34 @@ export default function Home() {
           <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
             © 2025 SendTheLink • Share knowledge freely
           </p>
-          <p className="text-xs mt-2" style={{ color: 'var(--text-muted)' }}>
-            Protected by reCAPTCHA and AI-powered content moderation
+
+          {/* Security Credits */}
+          <div className="flex flex-wrap justify-center gap-4 mt-4">
+            <a
+              href="https://www.virustotal.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs hover:text-white transition-colors flex items-center gap-1"
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              🛡️ Secured by VirusTotal
+            </a>
+            <span className="text-xs" style={{ color: 'var(--text-muted)' }}>•</span>
+            <a
+              href="https://urlscan.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs hover:text-white transition-colors flex items-center gap-1"
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              🔍 Scanned by URLScan.io
+            </a>
+          </div>
+
+          <p className="text-xs mt-4" style={{ color: 'var(--text-muted)' }}>
+            Protected by reCAPTCHA • All links are security scanned
           </p>
+
           <p className="text-xs mt-3">
             <a
               href="mailto:dmca@manji.eu.org"

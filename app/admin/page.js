@@ -25,12 +25,13 @@ export default function AdminPanel() {
     const [password, setPassword] = useState("");
     const [links, setLinks] = useState([]);
     const [filteredLinks, setFilteredLinks] = useState([]);
-    const [filter, setFilter] = useState("all"); // all, reported, flagged, security
+    const [filter, setFilter] = useState("all"); // all, reported, flagged, security, verified, notverified
     const [searchQuery, setSearchQuery] = useState("");
     const [loading, setLoading] = useState(false);
     const [editingLink, setEditingLink] = useState(null);
     const [editTags, setEditTags] = useState([]); // For tag editing in modal
     const [editStatus, setEditStatus] = useState('approved'); // For status editing
+    const [editVerified, setEditVerified] = useState(false); // For verified editing
     const [deleteConfirm, setDeleteConfirm] = useState(null); // For custom delete modal
 
     // Check for existing auth in localStorage
@@ -57,6 +58,10 @@ export default function AdminPanel() {
                 link.securityStatus === 'malicious' ||
                 link.status === 'pending_review'
             );
+        } else if (filter === "verified") {
+            filtered = filtered.filter(link => link.isVerified === true);
+        } else if (filter === "notverified") {
+            filtered = filtered.filter(link => !link.isVerified);
         }
 
         // Apply search
@@ -237,7 +242,7 @@ export default function AdminPanel() {
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
                     <div className="glass-card p-5">
                         <div className="text-3xl font-bold">{links.length}</div>
                         <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>Total Links</div>
@@ -259,6 +264,12 @@ export default function AdminPanel() {
                             {links.filter(l => l.securityStatus === 'suspicious' || l.securityStatus === 'malicious').length}
                         </div>
                         <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>🛡️ Security Review</div>
+                    </div>
+                    <div className="glass-card p-5">
+                        <div className="text-3xl font-bold text-blue-300">
+                            {links.filter(l => l.isVerified === true).length}
+                        </div>
+                        <div className="text-sm" style={{ color: 'var(--text-secondary)' }}>✓ Verified Posts</div>
                     </div>
                 </div>
 
@@ -294,6 +305,20 @@ export default function AdminPanel() {
                                     }`}
                             >
                                 🛡️ Security
+                            </button>
+                            <button
+                                onClick={() => setFilter("verified")}
+                                className={`px-4 py-2 rounded-lg transition ${filter === "verified" ? "bg-blue-500" : "bg-white/10 hover:bg-white/20"
+                                    }`}
+                            >
+                                ✓ Verified
+                            </button>
+                            <button
+                                onClick={() => setFilter("notverified")}
+                                className={`px-4 py-2 rounded-lg transition ${filter === "notverified" ? "bg-gray-500" : "bg-white/10 hover:bg-white/20"
+                                    }`}
+                            >
+                                Not Verified
                             </button>
                         </div>
 
@@ -348,7 +373,8 @@ export default function AdminPanel() {
                                     message: formData.get('message'),
                                     url: formData.get('url'),
                                     tags: editTags,
-                                    status: editStatus
+                                    status: editStatus,
+                                    isVerified: editVerified
                                 };
                                 handleUpdate(editingLink.id, updates);
                             }} className="space-y-4">
@@ -427,6 +453,32 @@ export default function AdminPanel() {
                                     </select>
                                 </div>
 
+                                <div>
+                                    <label className="block text-sm font-medium mb-2">✓ Verified Status:</label>
+                                    <div className="flex gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => setEditVerified(true)}
+                                            className={`flex-1 px-4 py-2 rounded-lg transition font-medium ${editVerified
+                                                    ? 'bg-blue-500 text-white'
+                                                    : 'bg-white/10 hover:bg-white/20'
+                                                }`}
+                                        >
+                                            ✓ Verified
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setEditVerified(false)}
+                                            className={`flex-1 px-4 py-2 rounded-lg transition font-medium ${!editVerified
+                                                    ? 'bg-gray-500 text-white'
+                                                    : 'bg-white/10 hover:bg-white/20'
+                                                }`}
+                                        >
+                                            Not Verified
+                                        </button>
+                                    </div>
+                                </div>
+
                                 <div className="flex gap-3 pt-4">
                                     <button
                                         type="submit"
@@ -472,7 +524,14 @@ export default function AdminPanel() {
                             <tbody>
                                 {filteredLinks.map((link) => (
                                     <tr key={link.id} className="border-b border-white/5 hover:bg-white/5">
-                                        <td className="p-3 text-sm">{link.from || "Anonymous"}</td>
+                                        <td className="p-3 text-sm">
+                                            <div className="flex items-center gap-2">
+                                                {link.from || "Anonymous"}
+                                                {link.isVerified && (
+                                                    <span className="verified-icon" title="Verified">✓</span>
+                                                )}
+                                            </div>
+                                        </td>
                                         <td className="p-3 text-sm max-w-xs truncate">{link.message}</td>
                                         <td className="p-3 text-sm">
                                             <div className="flex flex-wrap gap-1 max-w-[150px]">
@@ -536,6 +595,7 @@ export default function AdminPanel() {
                                                         setEditingLink(link);
                                                         setEditTags(link.tags || []);
                                                         setEditStatus(link.status || 'approved');
+                                                        setEditVerified(link.isVerified || false);
                                                     }}
                                                     className="text-xs px-3 py-1 rounded bg-blue-500/20 hover:bg-blue-500/30 transition"
                                                     title="Edit"

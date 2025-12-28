@@ -9,7 +9,7 @@ import { db } from '../../../lib/firebase';
 
 export async function POST(request) {
     try {
-        const { from, message, url, isAnonymous, metaTitle, metaImage, tags } = await request.json();
+        const { from, message, url, isAnonymous, metaTitle, metaImage, tags, verifyPassword } = await request.json();
 
         // Basic validation
         if (!message || !url) {
@@ -38,10 +38,15 @@ export async function POST(request) {
         const cleanMessage = message.trim().substring(0, 500);
         const cleanURL = trimmedURL.substring(0, 2000);
 
+        // Check if user is verified via password
+        const verifiedPassword = process.env.VERIFIED_USER_PASSWORD;
+        const isVerified = verifiedPassword && verifyPassword === verifiedPassword && !isAnonymous;
+
         // Create link document with security status pending
         const linkData = {
             from: cleanFrom,
             isAnonymous: !!isAnonymous,
+            isVerified: isVerified, // NEW: Verified badge status
             message: cleanMessage,
             url: cleanURL,
             tags: tags,

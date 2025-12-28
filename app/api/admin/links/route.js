@@ -70,15 +70,21 @@ export async function PATCH(request) {
         }
 
         // Only allow specific fields to be updated
-        const allowedFields = ['message', 'status', 'from', 'url', 'tags'];
+        const allowedFields = ['message', 'status', 'from', 'url', 'tags', 'isVerified'];
         const cleanUpdates = {};
 
         for (const field of allowedFields) {
             if (updates[field] !== undefined) {
-                // Handle tags as array, other fields as trimmed strings
+                // Handle tags as array
                 if (field === 'tags' && Array.isArray(updates[field])) {
                     cleanUpdates[field] = updates[field];
-                } else if (field !== 'tags') {
+                }
+                // Handle isVerified as boolean
+                else if (field === 'isVerified') {
+                    cleanUpdates[field] = Boolean(updates[field]);
+                }
+                // Other fields as trimmed strings
+                else if (field !== 'tags') {
                     cleanUpdates[field] = String(updates[field]).trim().substring(0, 2000);
                 }
             }
